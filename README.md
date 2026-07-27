@@ -41,8 +41,9 @@ This tool is designed around the cheapest phones you can find on eBay — FRP-lo
 Android 12:  
 - Pixel 3 XL with default Google Fi ROM. (_mdm lock bypassed_)
 - Moto G Stylus 2022 (Non-5G) with default Cricket ROM.
+- Pixel 2 with default Google Fi ROM. (_mdm lock bypassed_)
 
-Android 15:  
+Android 15 **Currently Inop**:  
 - Pixel 2 with LineageOS 22.2 ROM. (_FRP lock bypassed_)
 **Issues: **
   - **OPEN** Audio stream is dead silent unless you open the LineageOS Recorder application, and start/stop a recording. RTSP audio spring to life when you do this, and remains functional until a reboot. I am not sure of the mechanism causing this quite yet, Android 15 seems to be locked down a little tighter.
@@ -56,7 +57,7 @@ Other:
 
 ## Device Preparation
 1. Evaluate condition & functionality of phone. Note MDM or FRP locks.
-2. Perform factory reset or flash to LineageOS wherever possible.
+2. Perform factory reset and debloat as needed. Currently using Universal Android Debloater Next Gen for this.
 3. Bypass FRP / Remove MDM as needed. (see [MDM/FRP Locks](#locks))
 4. Complete OOBE, skipping all setup including cellular, network, PIN, etc.
 
@@ -79,7 +80,7 @@ The verbiage varies a bit from device to device, but these are my baseline confi
 - USB debugging: On  
 - Mobile data always active: Off  
 
-Then, connect to the phone via ADB (either USB or network) and run the following:
+Then, connect to the phone via ADB (USB or network) and run the following (this is assuming you have downloaded these APKs already:
 ```
 adb install com.termux_1022.apk
 adb install com.termux.api_1002.apk
@@ -101,21 +102,25 @@ pkg install termux-services openssh
 sv-enable sshd
 passwd
 ```
-- The "passwd" command is to set your SSH login password. You'll need to exit and restart Termux afterward. From there, we can connect to the device over SSH on port 8022 since we're not rooted.
+- The "passwd" command is to set your SSH login password. You'll need to exit and restart Termux afterward. From there, we can connect to the device over SSH on port 8022 (binds to 8022 instead of 22 since we're not running with root priv on the phones).
 ```
 ssh 1.2.3.4 -p 8022
 pkg install ffmpeg pulseaudio lighttpd iproute2 termux-api
+```
+Next, we'll make the startup and streaming script files, I just copy paste the contents from this repo into new files - SCP works too if you prefer:
+```
 mkdir ~/.termux/boot/
-```
-- Place `start-birdfeeder.sh` into `~/.termux/boot/` and `birdfeeder.sh` into `~/` (e.g. `nano` the file directly on-device and paste the contents, or `scp` them over from your workstation), then:
-```
+nano ~/.termux/boot/start-birdfeeder.sh
 chmod +x ~/.termux/boot/start-birdfeeder.sh
+nano ~/birdfeeder.sh
 chmod +x ~/birdfeeder.sh
 ```
-
-- Add these three lines to the bottom of the lighttpd configuration file:
+Open the lighttpd configuration file:
 ```
 nano $PREFIX/etc/lighttpd/lighttpd.conf
+```
+Add these three lines to the bottom of it and save:
+```
 server.document-root = "/data/data/com.termux/files/home/www"
 server.port = 8080
 index-file.names = ( "index.html" )
