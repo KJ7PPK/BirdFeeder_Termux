@@ -1,3 +1,4 @@
+## Please note that I'm no longer using this, so YMMV. I'm leaving it here for reference purposes.
 # The OG - Pi Zero / 2 W RTSP Streaming & Health Monitor Script
 **Note:** The audio quality I got from USB mics, USB sound cards with analog lav mics, and analog lav mics with a separate ADC is marginal at best - the amount of noise the hardware introduces is significant, even compared to the low bitrate, low sample-rate audio I get from my POE surveillance cameras.
 
