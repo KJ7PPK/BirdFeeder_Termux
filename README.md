@@ -25,18 +25,6 @@ This tool is designed around the cheapest phones you can find on eBay — FRP-lo
 
 ---
 
-## Table of Contents
-
-- [Successfully Deployed Devices](#successfully-deployed-devices)
-- [Debloating Tools](#debloating-tools) **In Progress, likely moving to Wiki.**
-- [MDM/FRP Locks](#locks) **In Progress, likely moving to Wiki.**
-- [Device Preparation](#device-preparation)
-- [BirdFeeder Setup Process](#birdfeeder-setup)
-- [Kiosk Mode (Optional)](#kiosk-mode) **In Testing, documentation to follow.**
-- [Acknowledgements](#acknowledgements)
-
----
-
 ## Successfully Deployed Devices
 Android 12:  
 - Pixel 3 XL with default Google Fi ROM. (_mdm lock bypassed_)
@@ -51,7 +39,7 @@ Android 15 **Currently Inop**:
   - **Resolved** Termux:Boot was able to start the streaming script, but SSH was never listening unless you brought Termux to the foreground. I modified the start-birdfeeder.sh with one line so that the background processes (specifically, sshd) would run, else it required first bringing Termux into the foreground. That line was "$PREFIX/bin/runsvdir $PREFIX/var/service > /dev/null 2>&1 &". This is in the default repo file now, should not have negative impact on older devices.
 
 Other:  
-- Raspberry Pi Zero 2 W (deprecated, script in repo for reference)
+- Raspberry Pi Zero 2 W (deprecated, directory in the repo for reference)
 
 ---
 
@@ -132,6 +120,11 @@ index-file.names = ( "index.html" )
 My better half often moves these phones around to different physical feeder areas, and the current solution does not provide a simple way for her to check the device's status. The solution I decided on was to sideload WebViewKiosk_v0.26.18.apk, set the homepage to http://localhost:8080, set WebViewKiosk as the phone's launcher, and enable lock. Pressing the power button will now display a live copy of the health webpage. More later..
 
 ---
+
+---
+
+## Setup without Internet access
+I'm working on steps here, basically we're doing all of the configuration and package installation from a locally stored repo. There are downsides to this approach, but one upside is that most of the work is done purely from your machine console rather than having to type anything on the phone. WIP 9/1/26
 
 ## Acknowledgements
 
